@@ -3,7 +3,7 @@ layout: post
 title: Constraining templates in C++
 ---
 
-I started my hobby project [SimpleSTL](https://github.com/Panky-codes/SimpleSTL) in which I started implementing a basic version of STL to learn Modern C++, and also serve as a reference for beginners who wants to get a sneak peek into a possible implementation of STL. 
+In my hobby project [SimpleSTL](https://github.com/Panky-codes/SimpleSTL), I started implementing a basic version of STL to learn Modern C++ and also serve as a reference for beginners who wants to get a sneak peek into a possible implementation of STL. For now, I have implemented only the vector container.
 
 I encountered something interesting while implementing the insert member function for the vector container. There were totally five overloads for the insert function given by the standard as follows:
 ```cpp
@@ -43,7 +43,7 @@ I can avoid this by specifically telling the second parameter of the insert func
 
 So I should somehow instruct my compiler to use overload #4 if and only if the last two parameters qualifies as`LegacyInputIterator`. 
 ## Using std::enable_if
-Initially I didn't know how to go about giving constraints for the template parameters. Like everyone else, I posted this question on stackoverflow. My question was marked as **duplicate** within few minutes. Mod commented saying look at the concept called `SFINAE` (Substitution failure is not an error) and `enable_if`.
+Initially I didn't know how to go about giving constraints for the template parameters. Like most people, I posted this question on stackoverflow. My question was marked as **duplicate** within few minutes. Mod commented saying look at the concept called `SFINAE` (Substitution failure is not an error) and `enable_if`.
 
 The idea of `enable_if`, as the name suggests, it **enables** the generic code **if** it meets certain conditions. I need to constrain my template parameters for type `InputIt` to qualify as `LegacyInputIterator`. 
 
@@ -78,14 +78,14 @@ If the first template parameter B is true, then `enable_if` creates an alias cal
 
 We give the constraints for the template overload as the first parameter B. So when constraint is false, we don't get an alias called `type` for T, therefore, this template is not a good fit for the constraint B. They generally do this by template specialization which I won't go over in this article.
 
-So if the constraint is false, we don't get an alias called type at all, yet we have it as a part of our template definition. You might ask that shouldn't it lead to build failure? That is where SFINAE comes in and says this failure is not an error, so everything works fine.
+So if the constraint is false, we don't get an alias called type at all, yet we have it as a part of our template definition. You might ask, shouldn't it lead to a build failure? That is where SFINAE comes in and says that this template substitution failure is not an error, so everything works fine.
 
-Now back to the snippet of code I wrote to resolve the overload resolution problem in my code. The `enable_if` checks if the *InputIt* comes from the base class of the [std:input_iterator_tag](https://en.cppreference.com/w/cpp/iterator/iterator_tags) which contains the properties of the LegacyInputIterator as defined by the standard. Now my test passes as this overload #4 is called only if I pass iterators as the argument. 
+Now back to the snippet of code I wrote to resolve the overload resolution problem in my code. The `enable_if` checks if the *InputIt* comes from the base class of the [std:input_iterator_tag](https://en.cppreference.com/w/cpp/iterator/iterator_tags) which contains the properties of the LegacyInputIterator as defined by the standard. Now my test passes as the overload #4 is called only if I pass iterators as the argument. 
 
-This is one way of solving the template overload resolution problem. But there is another way of idiomatically solving this with C++20.
+This is one way of solving the template overload resolution problem. But is there another way of idiomatically solving this in C++?
 
 ## Concepts
-With C++20, we are officially getting a feature called `Concepts` inside the standard. Concepts are named sets of requirements for the templates. Concepts define what type of parameters the templates should accept. One of the biggest advantages of Concepts are improved error messages for users by avoiding going into the weeds of implementation. Also the readability of the code itself is much better with Concepts.
+With C++20, we are officially getting a feature called `Concepts` inside the standard. Concepts are named sets of requirements for the templates. They define what type of parameters the templates should accept. One of the biggest advantages of Concepts are improved error messages for users by avoiding going into the weeds of implementation. Also the readability of the code itself is much better with Concepts.
 
 I will show how we can constrain the templates using the new Concepts feature and then explain the syntax. 
 ```cpp
@@ -96,7 +96,7 @@ using std::input_iterator_tag;
 
 template <typename T>
   concept InputIterator = requires(T t) {
-  { typename iterator_traits<T>::iterator_category() } -> input_iterator_tag;
+  { typename iterator_traits<T>::iterator_category{} } -> input_iterator_tag;
   };
 
 template<typename T>
@@ -111,13 +111,13 @@ template<typename T>
 ```
 Initially we need to create a Concept called InputIterator<sup>1</sup>. The Concept has a requires clause which states that the template T's iterator category should satisfy the requirements of a `std::input_iterator_tag` to put it in layman's terms. In general, the decltype of the expression inside the flower braces of the requires clause should satisfy the type constraint given after the arrow (->) symbol. 
 
-Now we just use the `Concept` when defining the template as shown in the example. This performs exactly the same as the previous code snippet with `enable_if` and it is much more readable. 
+Now we just use the `Concept` when defining the template as shown in the code snippet above. This performs exactly the same as the previous code snippet with `enable_if` and it is much more readable. 
 
-Bjarne Stroustrop, the founder of C++, gives the example of a sort algorithm from STL to illustrate `Concepts` at [CPPCON](https://www.youtube.com/watch?v=HddFGPTAmtU&t=1117s). Sort algorithm's template parameter defines a Concept which takes the iterator that are only sortable or else it gives a nice error message during compile time saying that the container is not sortable. I got the concept of `Concepts` (I had to do this at least once ;) ) from his talk but understood it's power only after using it. 
+Bjarne Stroustrop, the founder of C++, gives the example of a sort algorithm from STL to illustrate `Concepts` at [CPPCON](https://www.youtube.com/watch?v=HddFGPTAmtU&t=1117s). Sort algorithm's template parameter defines a Concept which takes the iterator of a container that are only sortable or else it gives a nice error message during compile time saying that the container is not sortable. I got the concept of `Concepts` (I had to do this at least once ;) ) from his talk but understood it's power only after using it. 
 
 Hope you enjoyed the article. Happy coding!
 
-<sup>1</sup>Alternatively we could define a concept without requires clause as follows:
+<sup>1</sup>Alternatively we could define a Concept without requires clause as follows:
 ```cpp
 template <typename T>
 concept InputIterator = std::is_base_of<std::input_iterator_tag,
