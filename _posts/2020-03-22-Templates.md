@@ -37,10 +37,10 @@ Note that the variable `pos`, `first`, `last` are of type iterators. Iterators a
 I was writing unit tests to test overload #1 for my vector container. I wrote the code as follows:
 ```cpp
 sstl::vector<int> vec1{1, 2, 3, 4};
-auto iter = vec1.insert(vec1.cbegin() + 4, 2, 5); //function call
+auto iter = vec1.insert(vec1.cbegin() + 4, 2, 5); // index = 4, count = 2, value = 5 
 ```
 
-In the code by using overload #1, I am trying to insert 2 times the value 5 at index 4 of the vector. My compiler (GCC in this case) threw an error to my function call in the unit test. In brief, the error message contained the following type deduction:
+My compiler (GCC in this case) threw an error to my function call in the unit test. In brief, the error message contained the following type deduction:
 ```cpp
 [with InputIt = int; T = int; sstl::vector<T>::iterator = int*; sstl::vector<T>::const_iterator = const int*]
 ```
@@ -50,7 +50,7 @@ From compilers perspective it makes total sense as the values of the last two pa
 
 [Cppreference](https://en.cppreference.com/w/cpp/container/vector/insert) site states the following about the insert function: "This [#2] overload only participates in overload resolution if InputIt qualifies as LegacyInputIterator, to avoid ambiguity with the overload #1". Exactly what happens here. 
 
-I can avoid this situation by specifically telling the second parameter of the insert function call to be of type `size_t`, and then it will call overload #1 as expected. But if this is a library that will be used by many programmers, we can't enforce the users to specify the second parameter to be of type `size_t`. The function call I wrote in my unit test is a valid code that should not result in a compilation error.
+I can avoid this compilation error by declaring the second parameter of the insert function to be of type `size_t`. But if this is a library that will be used by many programmers, we can't enforce the users to specify the second parameter to be of type `size_t`. The function call I wrote in my unit test is a valid code that should not result in a compilation error.
 
 So I should somehow instruct my compiler to use overload #2 if and only if the last two parameters qualify as `LegacyInputIterator`. 
 ## Using std::enable_if
@@ -78,7 +78,7 @@ namespace sstl {
 ```
 Okkk! That escalated quickly. Let me explain what it does before you start questioning yourself about learning C++ after seeing `enable_if` syntax. 
 
-The `enable_if` syntax does not look idiomatic at all. If you are new to C++, like me, you might find it hard to understand the construct. As Scott Meyers said in his book, Effective Modern C++, about the `enable_if` syntax: "the syntax is off-putting, especially if you've never seen it before". It took me some time and pestering some people in the slack channel to understand what it does. 
+The `enable_if` syntax does not look idiomatic at all. If you are new to C++, like me, you might find it hard to understand the construct. As Scott Meyers points out in his book, Effective Modern C++, about the `enable_if` syntax: "the syntax is off-putting, especially if you've never seen it before". It took me some time and pestering some people in the slack channel to understand what it does. 
 
 Before I explain how I constrained my overload #2 with `enable_if`, I will briefly touch upon the syntax of it. The definition of `std::enable_if` is as follows:
 ```cpp
@@ -100,7 +100,7 @@ auto iter = vec1.insert(vec1.cbegin() + 4, 2, 5); // calls overload #1
 This is one way of solving the template overload resolution problem. But is there another way of idiomatically solving this in C++?
 
 ## Concepts
-With C++20, we are officially getting a feature called `Concepts` inside the standard. Concepts are named sets of requirements for the templates. They define what type of parameters the templates should accept. One of the biggest advantages of Concepts is improved error messages for users by avoiding going into the weeds of implementation. Also, the readability of the code itself is much better with Concepts.
+With C++20, we are officially getting a feature called `Concepts` inside the standard. Concepts are named sets of requirements for the templates. They define what type of parameters the templates should accept. One of the biggest advantages of Concepts is improved error messages for users by avoiding going into the weeds of implementation. Also, the readability of the code gets better with Concepts.
 
 I will show how we can constrain the templates using the new Concepts feature and then explain the syntax. 
 ```cpp
@@ -132,7 +132,7 @@ I **removed overload #1** to check the error message coming from `Concepts`. And
 
 ```cpp
 sstl::vector<int> vec1{1, 2, 3, 4};
-auto iter = vec1.insert(vec1.cbegin() + 4, 2, 5); //function call
+auto iter = vec1.insert(vec1.cbegin() + 4, 2, 5); //Trying to call overload #1 that doesn't exist now
 ```
 I got an error message from the compiler as follows:
 ```cpp
