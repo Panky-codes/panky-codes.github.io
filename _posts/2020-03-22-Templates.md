@@ -3,7 +3,7 @@ layout: post
 title: Constraining templates in C++
 ---
 
-In my hobby project [SimpleSTL](https://github.com/Panky-codes/SimpleSTL), I started implementing a basic version of Standard Template Library (STL) to learn modern C++ and also serve as a reference for beginners who wants to get a sneak peek into a possible implementation of STL. For now, I have implemented only the vector container and I intend to add more in the future.
+In my hobby project [SimpleSTL](https://github.com/Panky-codes/SimpleSTL), I started implementing a basic version of Standard Template Library (STL) to learn modern C++ and also serve as a reference for beginners who wants to get a sneak peek into a possible implementation of STL.
 
 I encountered something interesting while implementing the insert member function for the vector container. There are five overloads for the insert function given by the standard. The overloads that are of interest for this article are given below:
 ```cpp
@@ -76,7 +76,7 @@ namespace sstl {
   };
 }
 ```
-Okkk! That escalated quickly. Let me explain what it does before you start questioning yourself about learning C++ after seeing `enable_if` syntax. 
+Okkk! That escalated quickly. Let me explain what it does before you start questioning yourself about learning C++. 
 
 The `enable_if` syntax does not look idiomatic at all. If you are new to C++, like me, you might find it hard to understand the construct. As Scott Meyers points out in his book, Effective Modern C++, about the `enable_if` syntax: "the syntax is off-putting, especially if you've never seen it before". It took me some time and pestering some people in the slack channel to understand what it does. 
 
