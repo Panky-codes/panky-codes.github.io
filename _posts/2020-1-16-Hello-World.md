@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Hello World!!
+tags: general
 ---
 
 I have always wanted to blog about what I know. I truly believe in the power and the process of writing. I am sure putting down your thoughts can give you new perspective that was not obvious before.

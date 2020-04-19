@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Constraining templates in C++
+tags: c++ programming
 ---
 
 In my hobby project [SimpleSTL](https://github.com/Panky-codes/SimpleSTL), I started implementing a basic version of Standard Template Library (STL) to learn modern C++ and also serve as a reference for beginners who wants to get a sneak peek into a possible implementation of STL.
