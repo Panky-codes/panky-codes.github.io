@@ -25,11 +25,11 @@ namespace sstl {
 ```  
 The overload #1 is used to insert a `value` for `count` number of times at position `pos` of the vector as shown in the figure below:
 
-![Insert overload 1](/assets/insert1.jpg)
+![Insert overload 1](/assets/templates-concepts/insert1.jpg)
 
 The overload #2 is used to insert another container (e.g. vector, set, etc) into the vector at position `pos`. `first` and `last` are the iterators pointing to the first and the last element(not including) of the container we want to insert as shown below:
 
-![Insert overload 2](/assets/insert2.jpg)
+![Insert overload 2](/assets/templates-concepts/insert2.jpg)
   
 Note that the variable `pos`, `first`, `last` are of type iterators. Iterators are a pointer-like object that can be incremented with ++, dereferenced with \*, and compared against another iterator with !=. The value of these iterator variables should be equal to the vector's base pointer plus the index. The picture is shown only with the index for simplicity.   
 
