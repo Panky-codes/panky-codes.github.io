@@ -5,7 +5,7 @@ author:
 description: > # this means to ignore newlines until "show_excerpts:"
     An electrical engineer accidentally turned into an embedded software developer
 show_excerpts: false # set to true to show excerpts on the homepage
-google_analytics: G-XEJBXCL3Z2
+google_analytics: UA-186260279-1
 
 # Minima date format
 # refer to https://shopify.github.io/liquid/filters/date/ if you want to customize this
