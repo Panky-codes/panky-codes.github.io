@@ -165,7 +165,8 @@ Whenever a `lap` button is pressed in the `States::Running`, the `currentTime` i
 |:--:|
 | *Splits highlighted in the stopwatch app* |
 
-### Final result
+### Final result:
+The final PR that got merged can be viewed [here](https://github.com/JF002/InfiniTime/pull/231) in case if someone wants to see the complete code.
 
 | ![Init picture \label{classdiag}](/assets/pinetime/init.jpg) |
 |:--:|
