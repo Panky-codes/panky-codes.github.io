@@ -3,7 +3,7 @@ author:
   name: Pankaj Raghav
   #  email: pankaj.sarathy1992@gmail.com
 description: > # this means to ignore newlines until "show_excerpts:"
-    An electrical engineer accidentally turned into an embedded software developer
+    An electrical engineer accidentally turned into a software developer
 show_excerpts: false # set to true to show excerpts on the homepage
 google_analytics: UA-186260279-1
 

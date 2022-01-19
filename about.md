@@ -3,12 +3,11 @@ layout: page
 title: About
 permalink: /about/
 ---
-Welcome to my blog. I am an electrical power engineer turned software developer currently living in the Netherlands.
+Welcome to my blog. I am an electrical power engineer turned software developer currently living in Denmark.
 I love to explore new things. Currently my interests are in the following area (it might change in the future ;) ): 
-- Embedded software development 
-- C++
-- Python
-- Code analyzers
+- Operating systems
+- Embedded systems
+- C and C++
 - Vim
 - Self-improvement 
 
