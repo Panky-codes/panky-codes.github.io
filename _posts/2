@@ -124,7 +124,7 @@ to support block sizes > page sizes.
 
 This patchset extended iomap to deal with block size > page size to
 circumvent the limitation of the page cache. It adds a new flag:
-`IOMAP_F_ZERO_AROUND` to `iomap`. This flag tells the `iomap` layer to zero
+`IOMAP_F_ZERO_AROUND` to iomap. This flag tells the iomap layer to zero
 the whole block even if it is a sub-block IO.
 
 | ![ZERO AROUND](/assets/LBS/LBS_IU.png) |
@@ -185,14 +185,14 @@ the block will be fully initialised.
 ```
 
 IOMAP_F_ZERO_AROUND did not make it mainline as the kernel started the
-`folio` conversion around this time, and it solves this zero
+`struct folio` conversion around this time, and it solves this zero
 around problem from the memory management layer. The final
-implementation we got it upstreamed relied heavily on `large folio`
+implementation we got it upstreamed relied heavily on `struct folio`
 implementation.
 
-Even though this patchset did not upstream LBS support, lots of the
-XFS bugs to support this feature were fixed as a part for this series. This
-made things very easy later to support LBS in XFS.
+Even though this patchset did not upstream bs > ps support, lots of the
+XFS bugs to support bs > ps were fixed as a part for this series, which
+made things very easy to support bs > ps in XFS.
 
 ### Conclusion:
 All the previous efforts in supporting LBS revolved around 2 things:
